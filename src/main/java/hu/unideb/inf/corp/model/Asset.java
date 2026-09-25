@@ -1,14 +1,12 @@
 package hu.unideb.inf.corp.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.With;
+import lombok.*;
 
 import java.time.OffsetDateTime;
 
 @AllArgsConstructor
 @Builder
+@Value
 @With
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Asset {

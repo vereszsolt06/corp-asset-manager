@@ -5,10 +5,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.OffsetDateTime;
+import java.util.*;
 
 @Repository
 public class AssetRepositoryImpl implements AssetRepository{
@@ -20,26 +18,37 @@ public class AssetRepositoryImpl implements AssetRepository{
 
     @Override
     public List<Asset> findAll() {
-        return List.of();
+        return assets.values().stream()
+                .sorted(Comparator.comparing(Asset::getSerialNumber))
+                .toList();
     }
 
     @Override
     public Optional<Asset> findById(@NonNull String serialNumber) {
-        return Optional.empty();
+        return Optional.ofNullable(assets.get(serialNumber));
     }
 
     @Override
     public Asset create(@NonNull Asset asset) {
-        return null;
+        final var updated = asset
+                .withCreatedAt(OffsetDateTime.now())
+                .withUpdatedAt(OffsetDateTime.now());
+        assets.put(asset.getSerialNumber(),updated);
+        return updated;
     }
 
     @Override
     public Asset update(@NonNull Asset asset) {
-        return null;
+        if(!assets.containsKey(asset.getSerialNumber())){
+            throw new NoSuchElementException("Asset not found: " + asset.getSerialNumber());
+        }
+        final var updated = asset.withUpdatedAt(OffsetDateTime.now());
+        assets.put(asset.getSerialNumber(),updated);
+        return updated;
     }
 
     @Override
     public void deleteById(@NonNull String serialNumber) {
-
+        assets.remove(serialNumber);
     }
 }
