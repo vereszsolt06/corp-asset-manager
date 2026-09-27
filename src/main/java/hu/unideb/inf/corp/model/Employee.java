@@ -1,28 +1,26 @@
 package hu.unideb.inf.corp.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "assets")
+@Table(name = "employees")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @With
-public class Asset {
+public class Employee {
     @Id
-    String serialNumber;
+    String employeeId;
 
     String name;
-    @Enumerated(EnumType.STRING)
-    AssetType type;
-    @Enumerated(EnumType.STRING)
-    AssetStatus status;
-
-    String assignedEmployeeId;
+    String email;
+    String department;
 
     OffsetDateTime createdAt;
     OffsetDateTime updatedAt;

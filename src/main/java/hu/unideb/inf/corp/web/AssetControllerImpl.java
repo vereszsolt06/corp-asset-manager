@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +16,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AssetControllerImpl implements AssetController{
     private static final Logger LOGGER = LoggerFactory.getLogger(AssetControllerImpl.class);
-
     private final AssetRepository repository; // final, so @RequiredArgsConstructor could inject
 
     @Override
@@ -33,17 +33,21 @@ public class AssetControllerImpl implements AssetController{
     @Override
     public Asset createOne(Asset asset) {
         LOGGER.info("createdOne({})",asset);
-        return repository.create(asset.withSerialNumber(AssetUtils.nextSerialNumber()));
+        return repository.save(asset
+                .withSerialNumber(AssetUtils.nextSerialNumber())
+                .withCreatedAt(OffsetDateTime.now())
+                .withUpdatedAt(OffsetDateTime.now()));
     }
 
     @Override
     public Asset updateOne(Asset asset) {
         LOGGER.info("updateOne({})",asset);
-        return Optional.of(asset)
-                .map(Asset::getSerialNumber)
-                .flatMap(repository::findById)
-                .map(a -> a.withName(asset.getName()).withType(asset.getType()).withStatus(asset.getStatus()))
-                .map(repository::update)
+        return repository.findById(asset.getSerialNumber())
+                .map(a->a.withName(asset.getName())
+                                .withType(asset.getType())
+                                .withStatus(asset.getStatus())
+                                .withUpdatedAt(OffsetDateTime.now()))
+                .map(repository::save)
                 .orElseThrow();
     }
 
