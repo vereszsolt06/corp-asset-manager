@@ -13,6 +13,7 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @Builder
 @With
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Asset {
     @Id
     @EqualsAndHashCode.Include

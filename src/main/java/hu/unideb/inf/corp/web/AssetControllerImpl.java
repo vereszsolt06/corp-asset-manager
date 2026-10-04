@@ -1,7 +1,6 @@
 package hu.unideb.inf.corp.web;
 
 import hu.unideb.inf.corp.model.Asset;
-import hu.unideb.inf.corp.model.Employee;
 import hu.unideb.inf.corp.repository.AssetRepository;
 import hu.unideb.inf.corp.repository.EmployeeRepository;
 import hu.unideb.inf.corp.util.AssetUtils;
@@ -14,7 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,6 +36,7 @@ public class AssetControllerImpl implements AssetController{
     @Override
     public Asset createOne(Asset asset) {
         LOGGER.info("createdOne({})",asset);
+        validateEmployeeId(asset.getAssignedEmployeeId());
         return repository.save(asset
                 .withSerialNumber(AssetUtils.nextSerialNumber())
                 .withCreatedAt(OffsetDateTime.now())
@@ -47,6 +46,7 @@ public class AssetControllerImpl implements AssetController{
     @Override
     public Asset updateOne(Asset asset) {
         LOGGER.info("updateOne({})",asset);
+        validateEmployeeId(asset.getAssignedEmployeeId());
         return repository.findById(asset.getSerialNumber())
                 .map(a->a.withName(asset.getName())
                                 .withType(asset.getType())
