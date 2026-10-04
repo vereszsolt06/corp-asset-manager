@@ -60,6 +60,7 @@ public class EmployeeControllerImpl implements EmployeeController{
     }
 
     @Override
+    @Transactional
     public void deleteOne(String employeeId) {
         LOGGER.info("deleteOne({})",employeeId);
         assetRepository.findByAssignedEmployeeId(employeeId).forEach(asset -> {

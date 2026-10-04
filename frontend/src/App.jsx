@@ -2,6 +2,7 @@ import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
 import AssetList from './pages/AssetList.jsx';
 import EmployeeList from './pages/EmployeeList.jsx';
 import AssetForm from './pages/AssetForm.jsx';
+import EmployeeForm from './pages/EmployeeForm.jsx';
 
 export default function App() {
   return (
@@ -21,6 +22,8 @@ export default function App() {
               <Route path="/assets/new" element={<AssetForm />} />
               <Route path="/assets/:serialNumber" element={<AssetForm />} />
             <Route path="/employees" element={<EmployeeList />} />
+              <Route path="/employees/new" element={<EmployeeForm />} />
+              <Route path="/employees/:employeeId" element={<EmployeeForm />} />
           </Routes>
         </main>
       </>

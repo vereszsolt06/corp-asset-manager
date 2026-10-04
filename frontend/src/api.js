@@ -29,4 +29,8 @@ export const api = {
     deleteAsset: (serialNumber) => request(`/asset/${serialNumber}`, { method: 'DELETE' }),
 
     getEmployees: () => request('/employee'),
+    getEmployee: (employeeId) => request(`/employee/${employeeId}`),
+    createEmployee: (employee) => request('/employee', { method: 'POST', body: JSON.stringify(employee) }),
+    updateEmployee: (employee) => request('/employee', { method: 'PUT', body: JSON.stringify(employee) }),
+    deleteEmployee: (employeeId) => request(`/employee/${employeeId}`, { method: 'DELETE' }),
 };
