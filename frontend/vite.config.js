@@ -8,4 +8,9 @@ export default defineConfig({
       '/api': 'http://localhost:8081',
     },
   },
+  build: {
+    outDir: '../target/classes/static',
+    emptyOutDir: true,
+    assetsDir: 'bundle',
+  },
 });
