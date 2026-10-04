@@ -1,5 +1,6 @@
 package hu.unideb.inf.corp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,16 +15,24 @@ import java.time.OffsetDateTime;
 @With
 public class Asset {
     @Id
-    String serialNumber;
+    @EqualsAndHashCode.Include
+    private String serialNumber;
 
-    String name;
+    private String name;
     @Enumerated(EnumType.STRING)
-    AssetType type;
+    private AssetType type;
     @Enumerated(EnumType.STRING)
-    AssetStatus status;
+    private AssetStatus status;
 
-    String assignedEmployeeId;
+    @Column(name = "assigned_employee_id")
+    private String assignedEmployeeId;
 
-    OffsetDateTime createdAt;
-    OffsetDateTime updatedAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assigned_employee_id",insertable = false,updatable = false)
+    @JsonIgnore
+    @ToString.Exclude
+    private Employee assignedEmployee;
+
+    private OffsetDateTime createdAt;
+    private OffsetDateTime updatedAt;
 }

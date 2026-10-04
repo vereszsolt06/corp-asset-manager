@@ -6,8 +6,10 @@ spring:
     url: jdbc:h2:mem:corp_assets;DB_CLOSE_DELAY=-1
     driverClassName: org.h2.Driver
     username: sa
-    password: password
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
+  h2.console:
+    enabled: true
+    path: /db

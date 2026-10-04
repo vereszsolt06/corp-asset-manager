@@ -14,14 +14,16 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @Builder
 @With
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Employee {
     @Id
-    String employeeId;
+    @EqualsAndHashCode.Include
+    private String employeeId;
 
-    String name;
-    String email;
-    String department;
+    private String name;
+    private String email;
+    private String department;
 
-    OffsetDateTime createdAt;
-    OffsetDateTime updatedAt;
+    private OffsetDateTime createdAt;
+    private OffsetDateTime updatedAt;
 }
