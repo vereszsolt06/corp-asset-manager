@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { api } from '../api.js';
 import { ASSET_STATUSES, ASSET_TYPES } from '../labels.js';
 
@@ -20,12 +21,23 @@ export default function AssetList() {
             .finally(() => setLoading(false));
     }, []);
 
+    function handleDelete(asset) {
+        if (!window.confirm(`Biztosan törlöd? ${asset.name} (${asset.serialNumber})`)) return;
+
+        api.deleteAsset(asset.serialNumber)
+            .then(() => setAssets((prev) => prev.filter((a) => a.serialNumber !== asset.serialNumber)))
+            .catch((err) => alert(`A törlés nem sikerült: ${err.message}`));
+    }
+
     if (loading) return <p>Betöltés...</p>;
     if (error) return <p className="error">Hiba történt: {error}</p>;
 
     return (
         <>
-            <h1>Eszközök ({assets.length})</h1>
+            <div className="page-header">
+                <h1>Eszközök ({assets.length})</h1>
+                <Link to="/assets/new" className="btn primary">+ Új eszköz</Link>
+            </div>
             <table>
                 <thead>
                 <tr>
@@ -34,6 +46,7 @@ export default function AssetList() {
                     <th>Típus</th>
                     <th>Státusz</th>
                     <th>Kinél van</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -51,6 +64,12 @@ export default function AssetList() {
                             {asset.assignedEmployeeId
                                 ? `${employeeNames[asset.assignedEmployeeId] ?? 'Ismeretlen'} (${asset.assignedEmployeeId})`
                                 : '—'}
+                        </td>
+                        <td className="actions">
+                            <Link to={`/assets/${asset.serialNumber}`} className="btn small">Szerkesztés</Link>
+                            <button type="button" className="btn small danger" onClick={() => handleDelete(asset)}>
+                                Törlés
+                            </button>
                         </td>
                     </tr>
                 ))}

@@ -7,7 +7,14 @@ async function request(path, options = {}) {
     });
 
     if (!response.ok) {
-        throw new Error(`${response.status} ${response.statusText}`);
+        let message = `${response.status} ${response.statusText}`;
+        try {
+            const body = await response.json();
+            if (body.message) message = body.message;
+        } catch {
+            ///
+        }
+        throw new Error(message);
     }
 
     const text = await response.text();
@@ -16,5 +23,10 @@ async function request(path, options = {}) {
 
 export const api = {
     getAssets: () => request('/asset'),
+    getAsset: (serialNumber) => request(`/asset/${serialNumber}`),
+    createAsset: (asset) => request('/asset', { method: 'POST', body: JSON.stringify(asset) }),
+    updateAsset: (asset) => request('/asset', { method: 'PUT', body: JSON.stringify(asset) }),
+    deleteAsset: (serialNumber) => request(`/asset/${serialNumber}`, { method: 'DELETE' }),
+
     getEmployees: () => request('/employee'),
 };
