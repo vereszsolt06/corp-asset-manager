@@ -54,7 +54,7 @@ public class AssetControllerImpl implements AssetController{
                                 .withAssignedEmployeeId(asset.getAssignedEmployeeId())
                                 .withUpdatedAt(OffsetDateTime.now()))
                 .map(repository::save)
-                .orElseThrow();
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No Asset found"));
     }
 
     @Override

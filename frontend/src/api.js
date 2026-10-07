@@ -22,12 +22,8 @@ async function request(path, options = {}) {
 
     if (!response.ok) {
         let message = `${response.status} ${response.statusText}`;
-        try {
-            const body = await response.json();
-            if (body.message) message = body.message;
-        } catch {
-            ///
-        }
+        const body = await response.json().catch(() => null);
+        if (body?.message) message = body.message;
         throw new Error(message);
     }
 
